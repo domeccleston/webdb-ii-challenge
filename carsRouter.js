@@ -13,10 +13,37 @@ router.get('/', (req, res) => {
         })
 })
 
+router.get('/:id', async(req, res) => {
+    try {
+        const car = await db('cars').where({id: req.params.id});
+        res.json(car)
+    } catch (err) {
+        res.json(err);
+    }
+})
+
 router.post('/', async (req, res) => {
     try {
         const newCar = await db('cars').insert(req.body);
-        res.json("New car successfully added");
+        res.json({message: "New car successfully added"});
+    } catch (err) {
+        res.json(err);
+    }
+})
+
+router.put('/:id', async(req, res) => {
+    try {
+        const updatedCard = await db('cars').where({id: req.params.id}).update(req.body);
+        res.json({message: "Car details updated"});
+    } catch (err) {
+        res.json(err);
+    }
+})
+
+router.delete('/:id', async(req, res) => {
+    try {
+        const deletedCard = await db('cars').where({id: req.params.id}).del();
+        res.json({ message: "Car deleted successfully"})
     } catch (err) {
         res.json(err);
     }
